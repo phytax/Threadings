@@ -13,20 +13,11 @@ namespace Threadings
 
         private static void Main(string[] args)
         {
-            Ensure
-                .Collection
-                .HasItems(args, nameof(args), opt => opt.WithMessage("Please provide parameter 'locked' or 'lockless'")); 
-            
-            Ensure
-                .Collection
-                .SizeIs(args, 1, nameof(args) ,opt => opt.WithMessage("One and only one parameter allowed."));
-            
-            Ensure
-                .That(args[0] == "locked" || args[0] == "lockless", nameof(args), opt => opt.WithMessage("parameter must be 'locked' or 'lockless'"))
-                .IsTrue();
-           
+            ValidateArgs(args);
+
             Thread t1 = null;
             Thread t2 = null;
+            
             if (args[0] == "locked")
             {
                 t1 = new Thread(Locked1);
@@ -47,6 +38,7 @@ namespace Threadings
             Console.WriteLine(_sum);
         }
 
+        
         private static void Locked1()
         {
             lock (_sumLock)
@@ -77,6 +69,21 @@ namespace Threadings
             {
                 _sum += i;
             }
+        }
+
+        private static void ValidateArgs(string[] args){
+            
+            var paras = "'locked' or 'lockless'";
+
+            Ensure.Collection
+                .HasItems(args, nameof(args), opt => opt.WithMessage($"Please provide parameter {paras}"));
+
+            Ensure.Collection
+                .SizeIs(args, 1, nameof(args), opt => opt.WithMessage($"One and only one parameter allowed: {paras}"));
+
+            Ensure
+                .That(args[0] == "locked" || args[0] == "lockless", nameof(args), opt => opt.WithMessage($"parameter must be {paras}"))
+                .IsTrue();
         }
     }
 }
