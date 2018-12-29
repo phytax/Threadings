@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using EnsureThat;
 
 namespace Threadings
 {
@@ -10,13 +11,32 @@ namespace Threadings
         private static readonly object _sumLock = new object();
         private static int _length = 1_000_000;
 
-        private static void Main()
+        private static void Main(string[] args)
         {
-            //    var t1 = new Thread(Locked1);
-            //    var t2 = new Thread(Locked2);
-
-            var t1 = new Thread(Lockless1);
-            var t2 = new Thread(Lockless2);
+            Ensure
+                .Collection
+                .HasItems(args, nameof(args), opt => opt.WithMessage("Please provide parameter 'locked' or 'lockless'")); 
+            
+            Ensure
+                .Collection
+                .SizeIs(args, 1, nameof(args) ,opt => opt.WithMessage("One and only one parameter allowed."));
+            
+            Ensure
+                .That(args[0] == "locked" || args[0] == "lockless", nameof(args), opt => opt.WithMessage("parameter must be 'locked' or 'lockless'"))
+                .IsTrue();
+           
+            Thread t1 = null;
+            Thread t2 = null;
+            if (args[0] == "locked")
+            {
+                t1 = new Thread(Locked1);
+                t2 = new Thread(Locked2);
+            }
+            else if (args[0] == "lockless")
+            {
+                t1 = new Thread(Lockless1);
+                t2 = new Thread(Lockless2);
+            }
 
             t1.Start();
             t2.Start();
