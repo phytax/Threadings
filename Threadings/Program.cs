@@ -12,11 +12,11 @@ namespace Threadings
 
         private static void Main()
         {
-                       var t1 = new Thread(Locked1);
-                       var t2 = new Thread(Locked2);
+            //    var t1 = new Thread(Locked1);
+            //    var t2 = new Thread(Locked2);
 
-            // var t1 = new Thread(Lockless1);
-            // var t2 = new Thread(Lockless2);
+            var t1 = new Thread(Lockless1);
+            var t2 = new Thread(Lockless2);
 
             t1.Start();
             t2.Start();
