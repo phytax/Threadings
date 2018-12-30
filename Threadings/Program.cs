@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+// using System.Diagnostics;
 using System.Threading;
 using EnsureThat;
 
@@ -37,7 +37,6 @@ namespace Threadings
 
             Console.WriteLine(_sum);
         }
-
         
         private static void Locked1()
         {
@@ -70,7 +69,7 @@ namespace Threadings
                 _sum += i;
             }
         }
-
+        
         private static void ValidateArgs(string[] args){
             
             var paras = "'locked' or 'lockless'";
