@@ -8,7 +8,8 @@ namespace Threadings
     {
         private static long _sum;
         private static readonly object _sumLock = new object();
-        private static int _length = 1_000_000;
+        private static int _length = 100_000_000;
+        private static string _theArg;
 
         private static void Main(string[] args)
         {
@@ -17,15 +18,17 @@ namespace Threadings
             Thread t1 = null;
             Thread t2 = null;
             
-            if (args[0] == "locked")
+            switch (_theArg)
             {
+                case "locked":
                 t1 = new Thread(Locked1);
                 t2 = new Thread(Locked2);
-            }
-            else if (args[0] == "lockless")
-            {
+                break;
+
+                case "lockless":
                 t1 = new Thread(Lockless1);
                 t2 = new Thread(Lockless2);
+                break;
             }
 
             t1.Start();
@@ -82,6 +85,8 @@ namespace Threadings
             Ensure
                 .That(args[0] == "locked" || args[0] == "lockless", nameof(args), opt => opt.WithMessage($"parameter must be {paras}"))
                 .IsTrue();
+
+            _theArg = args[0];
         }
     }
 }
