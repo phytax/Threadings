@@ -9,26 +9,25 @@ namespace Threadings
         private static long _sum;
         private static readonly object _sumLock = new object();
         private static int _length = 100_000_000;
-        private static string _theArg;
 
         private static void Main(string[] args)
         {
-            _theArg = GetArg(args);
+            var theArg = GeFirstArg(args);
 
             Thread t1 = null;
             Thread t2 = null;
-            
-            switch (_theArg)
+
+            switch (theArg)
             {
                 case "locked":
-                t1 = new Thread(Locked1);
-                t2 = new Thread(Locked2);
-                break;
+                    t1 = new Thread(Locked1);
+                    t2 = new Thread(Locked2);
+                    break;
 
                 case "lockless":
-                t1 = new Thread(Lockless1);
-                t2 = new Thread(Lockless2);
-                break;
+                    t1 = new Thread(Lockless1);
+                    t2 = new Thread(Lockless2);
+                    break;
             }
 
             t1.Start();
@@ -39,7 +38,7 @@ namespace Threadings
 
             Console.WriteLine(_sum);
         }
-        
+
         private static void Locked1()
         {
             lock (_sumLock)
@@ -71,9 +70,10 @@ namespace Threadings
                 _sum += i;
             }
         }
-        
-        private static string GetArg(string[] args){
-            
+
+        private static string GeFirstArg(string[] args)
+        {
+
             var paras = "'locked' or 'lockless'";
 
             Ensure.Collection
@@ -83,7 +83,12 @@ namespace Threadings
                 .SizeIs(args, 1, nameof(args), opt => opt.WithMessage($"One and only one parameter allowed: {paras}"));
 
             Ensure
-                .That(args[0] == "locked" || args[0] == "lockless", nameof(args), opt => opt.WithMessage($"parameter must be {paras}"))
+                .That
+                (
+                    args[0] == "locked" || args[0] == "lockless",
+                    nameof(args),
+                    opt => opt.WithMessage($"parameter must be {paras}")
+                )
                 .IsTrue();
 
             return args[0];
