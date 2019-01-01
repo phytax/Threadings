@@ -13,7 +13,7 @@ namespace Threadings
 
         private static void Main(string[] args)
         {
-            ValidateArgs(args);
+            _thehArg = GetArg(args);
 
             Thread t1 = null;
             Thread t2 = null;
@@ -72,7 +72,7 @@ namespace Threadings
             }
         }
         
-        private static void ValidateArgs(string[] args){
+        private static string GetArg(string[] args){
             
             var paras = "'locked' or 'lockless'";
 
@@ -86,7 +86,7 @@ namespace Threadings
                 .That(args[0] == "locked" || args[0] == "lockless", nameof(args), opt => opt.WithMessage($"parameter must be {paras}"))
                 .IsTrue();
 
-            _theArg = args[0];
+            return args[0];
         }
     }
 }
