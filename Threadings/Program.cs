@@ -13,7 +13,7 @@ namespace Threadings
 
         private static void Main(string[] args)
         {
-            _thehArg = GetArg(args);
+            _theArg = GetArg(args);
 
             Thread t1 = null;
             Thread t2 = null;
