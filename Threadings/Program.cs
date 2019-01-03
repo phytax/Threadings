@@ -27,7 +27,7 @@ namespace Threadings
                 case "lockless":
                     t1 = new Thread(Lockless1);
                     t2 = new Thread(Lockless2);
-                    
+
                     break;
             }
 
@@ -74,26 +74,32 @@ namespace Threadings
 
         private static string GeFirstArg(string[] args)
         {
+            ValidateArgs(args);
+            return args[0];
+        }
 
+        private static void ValidateArgs(string[] args)
+        {
             var paras = "'locked' or 'lockless'";
 
-            Ensure.Collection
-                .HasItems(args, nameof(args), opt => opt.WithMessage($"Please provide parameter {paras}"));
 
-            Ensure.Collection
-                .SizeIs(args, 1, nameof(args), opt => opt.WithMessage($"One and only one parameter allowed: {paras}"));
 
-            Ensure
-                .That
-                (
-                    args[0] == "locked" || args[0] == "lockless",
+            Ensure.Collection.HasItems(
+                    args,
                     nameof(args),
-                    opt => opt.WithMessage($"parameter must be {paras}")
-                )
-                .IsTrue();
+                    opt => opt.WithMessage($"Please provide parameter {paras}"));
 
-            return args[0];
+            Ensure.Collection.SizeIs(
+                args,
+                1,
+                nameof(args),
+                opt => opt.WithMessage($"One and only one parameter allowed: {paras}"));
+
+            Ensure.That(
+                args[0] == "locked" || args[0] == "lockless",
+                nameof(args),
+                opt => opt.WithMessage($"parameter must be {paras}"))
+                .IsTrue();
         }
     }
 }
- 
